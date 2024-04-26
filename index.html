@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>Car Management System</h1>
+<div id="car-list">
+</div>
+<form id="car-form">
+    <input type="text" id="make" placeholder="Марка" required>
+    <input type="text" id="model" placeholder="Модель" required>
+    <input type="number" id="year" placeholder="Год выпуска" required>
+    <button type="submit">Добавить автомобиль</button>
+</form>
+
+<script>
+    function Car(make, model, year) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+
+    function addCarToList(car) {
+        var carList = document.getElementById("car-list");
+        var carItem = document.createElement("div");
+        carItem.classList.add("car-item");
+        carItem.textContent = car.make + " " + car.model + " (" + car.year + ")";
+
+        var deleteButton = document.createElement("button");
+        deleteButton.textContent = "Удалить";
+        deleteButton.addEventListener("click", function() {
+            carList.removeChild(carItem);
+        });
+
+        var editButton = document.createElement("button");
+        editButton.textContent = "Изменить";
+        editButton.addEventListener("click", function() {
+            var newMake = prompt("Введите новую марку", car.make);
+            var newModel = prompt("Введите новую модель", car.model);
+            var newYear = prompt("Введите новый год выпуска", car.year);
+            if (newMake && newModel && newYear) {
+                car.make = newMake;
+                car.model = newModel;
+                car.year = parseInt(newYear);
+                carItem.textContent = car.make + " " + car.model + " (" + car.year + ")";
+            }
+        });
+
+        carItem.appendChild(deleteButton);
+        carItem.appendChild(editButton);
+
+        carList.appendChild(carItem);
+    }
+
+    document.getElementById("car-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var makeInput = document.getElementById("make");
+        var modelInput = document.getElementById("model");
+        var yearInput = document.getElementById("year");
+
+        if (makeInput.value && modelInput.value && yearInput.value) {
+            var car = new Car(makeInput.value, modelInput.value, parseInt(yearInput.value));
+            addCarToList(car);
+            makeInput.value = "";
+            modelInput.value = "";
+            yearInput.value = "";
+        } 
+        else {
+            alert("Пожалуйста, заполните все поля");
+        }
+    });
+</script>
+</body>
+</html>
